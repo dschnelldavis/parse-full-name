@@ -1,7 +1,9 @@
 {
   "name": "parse-full-name",
-  "version": "1.0.0",
-  "description": "A function that accpts the full name of a person, analyzes its format, parses it, and returns its parts {title, first name, middle name, last name, nickname, suffix, (and error, if any)}.",
+  "version": "1.0.2",
+  "description": "A function that accpts the full name of a person, analyzes " +
+      "its format, parses it, and returns its parts {title, first name, " +
+      "middle name, last name, nickname, suffix, (and error, if any)}.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -10,9 +12,11 @@
     "type": "git", "url": "https://github.com/dschnelldavis/parse-full-name"
   },
   "keywords": [
-    "parse", "parser", "name", "full name", "first name", "middle name", "last name", "nickname"
+    "parse", "parser", "name", "full name", "first name", "middle name",
+    "last name", "nickname"
   ],
-  "author": "David Schnell-Davis <dschnelldavis@gmail.com> (http://github.com/dschnelldavis)",
+  "author": "David Schnell-Davis <dschnelldavis@gmail.com> " +
+      "(http://github.com/dschnelldavis)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dschnelldavis/parse-full-name/issues"

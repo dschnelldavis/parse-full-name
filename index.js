@@ -1,20 +1,28 @@
-exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError, useLongLists) {
+exports.parseFullName = function(
+    nameToParse, partToReturn, fixCase, stopOnError, useLongLists
+  ) {
   "use strict";
   var i, j, k, l, m, n, part, comma, titleList, suffixList, prefixList,
     partToCheck, partFound, partsFoundCount, firstComma, remainingCommas,
-    nameParts = [],
-    nameCommas = [null],
-    partsFound = [],
+    nameParts = [], nameCommas = [null], partsFound = [],
     conjunctionList = ['&','and','et','e','of','the','und','y'],
-    parsedName = {title: '', first: '', middle: '', last: '', nick: '', suffix: '', error: []};
+    parsedName = {title: '', first: '', middle: '', last: '', nick: '',
+      suffix: '', error: []};
 
   // Validate inputs, or set to defaults
-  partToReturn = partToReturn && partToReturn.toLowerCase() in {'title':'','first':'','middle':'','last':'','nick':'','suffix':'','error':''} ? partToReturn.toLowerCase() : 'all'; // 'all' = return object with all parts, others return single part
-  fixCase = fixCase !== 'undefined' && (fixCase === 0 || fixCase === 1) ? fixCase : -1; // -1 = fix case only if input is all upper or lowercase, 1 = always fix case, 0 = never fix case
-  stopOnError = stopOnError && stopOnError === 1 ? 1 : 0; // 0 = output warnings on parse error, but don't stop, 1 = throw JavaScript error
-  useLongLists = useLongLists && useLongLists === 1 ? 1 : 0; // 0 = use short lists, 1 = use long lists
+  partToReturn = partToReturn && partToReturn.toLowerCase() in {'title':'',
+    'first':'','middle':'','last':'','nick':'','suffix':'','error':''} ?
+    partToReturn.toLowerCase() : 'all';
+    // 'all' = return object with all parts, others return single part
+  fixCase = fixCase !== 'undefined' && (fixCase === 0 || fixCase === 1) ?
+    fixCase : -1; // -1 = fix case only if input is all upper or lowercase
+  stopOnError = stopOnError && stopOnError === 1 ? 1 : 0;
+    // 0 = output warnings on parse error, but don't stop
+  useLongLists = useLongLists && useLongLists === 1 ? 1 : 0;
+    // 0 = use short lists
 
-  // If stopOnError = 1, throw error, otherwise store error messages as warnings in returned error array
+  // If stopOnError = 1, throw error,
+  // otherwise store error messages as warnings in returned error array
   function handleError(errorMessage) {
     if (stopOnError) {
       throw 'Error: ' + errorMessage;
@@ -25,28 +33,37 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
 
   // If fixCase = 1, fix case of parsedName parts before returning
   function fixParsedNameCase (fixedCaseName, fixCaseNow) {
-    var forceCaseList = ['e','y','av','af','da','dal','de','del','der','di','la','le','van','der','den','vel','von','II','III','IV','J.D.','LL.M.','M.D.','D.O.','D.C.','Ph.D.'];
+    var forceCaseList = ['e','y','av','af','da','dal','de','del','der','di',
+      'la','le','van','der','den','vel','von','II','III','IV','J.D.','LL.M.',
+      'M.D.','D.O.','D.C.','Ph.D.'];
     var forceCaseListIndex;
     var namePartLabels = [];
     var namePartWords;
     if (fixCaseNow) {
-      namePartLabels = Object.keys(parsedName).filter(function(v) {return v !== 'error';});
+      namePartLabels = Object.keys(parsedName)
+        .filter(function(v) {return v !== 'error';});
       for (i=0, l=namePartLabels.length; i<l; i++) {
         if (fixedCaseName[namePartLabels[i]]) {
           namePartWords = (fixedCaseName[namePartLabels[i]]+'').split(' ');
           for (var j=0, m=namePartWords.length; j<m; j++) {
-            forceCaseListIndex = forceCaseList.map(function(v){return v.toLowerCase();}).indexOf(namePartWords[j].toLowerCase());
+            forceCaseListIndex = forceCaseList
+              .map(function(v){return v.toLowerCase();})
+              .indexOf(namePartWords[j].toLowerCase());
             if (forceCaseListIndex > -1) { // Set case of words in forceCaseList
               namePartWords[j] = forceCaseList[forceCaseListIndex];
-            } else if (namePartWords[j].length === 1) { // Convert single letters to uppercase
+            } else if (namePartWords[j].length === 1) { // Uppercase initials
               namePartWords[j] = namePartWords[j].toUpperCase();
             } else if (
                 namePartWords[j].length > 2 &&
-                namePartWords[j].slice(0,1)  === namePartWords[j].slice(0,1).toUpperCase() &&
-                namePartWords[j].slice(1,2) === namePartWords[j].slice(1,2).toLowerCase() &&
-                namePartWords[j].slice(2) === namePartWords[j].slice(2).toUpperCase()
+                namePartWords[j].slice(0,1)  ===
+                  namePartWords[j].slice(0,1).toUpperCase() &&
+                namePartWords[j].slice(1,2) ===
+                  namePartWords[j].slice(1,2).toLowerCase() &&
+                namePartWords[j].slice(2) ===
+                  namePartWords[j].slice(2).toUpperCase()
               ) { // Detect McCASE and convert to McCase
-              namePartWords[j] = namePartWords[j].slice(0,3) + namePartWords[j].slice(3).toLowerCase();
+              namePartWords[j] = namePartWords[j].slice(0,3) +
+                namePartWords[j].slice(3).toLowerCase();
             } else if (
                 namePartLabels[j] === 'suffix' &&
                 nameParts[j].slice(-1) !== '.' &&
@@ -56,7 +73,8 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
                 namePartWords[j] = namePartWords[j].toUpperCase();
               }
             } else { // Convert to Title Case
-              namePartWords[j] = namePartWords[j].slice(0,1).toUpperCase() + namePartWords[j].slice(1).toLowerCase();
+              namePartWords[j] = namePartWords[j].slice(0,1).toUpperCase() +
+                namePartWords[j].slice(1).toLowerCase();
             }
           }
           fixedCaseName[namePartLabels[i]] = namePartWords.join(' ');
@@ -75,19 +93,63 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
 
   // Auto-detect fixCase: fix if nameToParse is all upper or all lowercase
   if (fixCase === -1) {
-    fixCase = (nameToParse === nameToParse.toUpperCase() || nameToParse === nameToParse.toLowerCase() ? 1 : 0);
+    fixCase = (nameToParse === nameToParse.toUpperCase() ||
+    nameToParse === nameToParse.toLowerCase() ? 1 : 0);
   }
 
   // Initilize lists of prefixs, suffixs, and titles to detect
   // Note: These list entries must be all lowercase
   if (useLongLists) {
-    suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv','v','clu','chfc','cfp','md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.','p.c.','ph.d.'];
-    prefixList = ['a','ab','antune','ap','abu','al','alm','alt','bab','bäck','bar','bath','bat','beau','beck','ben','berg','bet','bin','bint','birch','björk','björn','bjur','da','dahl','dal','de','degli','dele','del','della','der','di','dos','du','e','ek','el','escob','esch','fleisch','fitz','fors','gott','griff','haj','haug','holm','ibn','kauf','kil','koop','kvarn','la','le','lind','lönn','lund','mac','mhic','mic','mir','na','naka','neder','nic','ni','nin','nord','norr','ny','o','ua','ui\'','öfver','ost','över','öz','papa','pour','quarn','skog','skoog','sten','stor','ström','söder','ter','ter','tre','türk','van','väst','väster','vest','von'];
-    titleList = ['mr','mrs','ms','miss','dr','herr','monsieur','hr','frau','a v m','admiraal','admiral','air cdre','air commodore','air marshal','air vice marshal','alderman','alhaji','ambassador','baron','barones','brig','brig gen','brig general','brigadier','brigadier general','brother','canon','capt','captain','cardinal','cdr','chief','cik','cmdr','coach','col','col dr','colonel','commandant','commander','commissioner','commodore','comte','comtessa','congressman','conseiller','consul','conte','contessa','corporal','councillor','count','countess','crown prince','crown princess','dame','datin','dato','datuk','datuk seri','deacon','deaconess','dean','dhr','dipl ing','doctor','dott','dott sa','dr','dr ing','dra','drs','embajador','embajadora','en','encik','eng','eur ing','exma sra','exmo sr','f o','father','first lieutient','first officer','flt lieut','flying officer','fr','frau','fraulein','fru','gen','generaal','general','governor','graaf','gravin','group captain','grp capt','h e dr','h h','h m','h r h','hajah','haji','hajim','her highness','her majesty','herr','high chief','his highness','his holiness','his majesty','hon','hr','hra','ing','ir','jonkheer','judge','justice','khun ying','kolonel','lady','lcda','lic','lieut','lieut cdr','lieut col','lieut gen','lord','m','m l','m r','madame','mademoiselle','maj gen','major','master','mevrouw','miss','mlle','mme','monsieur','monsignor','mr','mrs','ms','mstr','nti','pastor','president','prince','princess','princesse','prinses','prof','prof dr','prof sir','professor','puan','puan sri','rabbi','rear admiral','rev','rev canon','rev dr','rev mother','reverend','rva','senator','sergeant','sheikh','sheikha','sig','sig na','sig ra','sir','sister','sqn ldr','sr','sr d','sra','srta','sultan','tan sri','tan sri dato','tengku','teuku','than puying','the hon dr','the hon justice','the hon miss','the hon mr','the hon mrs','the hon ms','the hon sir','the very rev','toh puan','tun','vice admiral','viscount','viscountess','wg cdr'];
+    suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv',
+      'v','clu','chfc','cfp','md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.',
+      'p.c.','ph.d.'];
+    prefixList = ['a','ab','antune','ap','abu','al','alm','alt','bab','bäck',
+      'bar','bath','bat','beau','beck','ben','berg','bet','bin','bint','birch',
+      'björk','björn','bjur','da','dahl','dal','de','degli','dele','del',
+      'della','der','di','dos','du','e','ek','el','escob','esch','fleisch',
+      'fitz','fors','gott','griff','haj','haug','holm','ibn','kauf','kil',
+      'koop','kvarn','la','le','lind','lönn','lund','mac','mhic','mic','mir',
+      'na','naka','neder','nic','ni','nin','nord','norr','ny','o','ua','ui\'',
+      'öfver','ost','över','öz','papa','pour','quarn','skog','skoog','sten',
+      'stor','ström','söder','ter','ter','tre','türk','van','väst','väster',
+      'vest','von'];
+    titleList = ['mr','mrs','ms','miss','dr','herr','monsieur','hr','frau',
+      'a v m','admiraal','admiral','air cdre','air commodore','air marshal',
+      'air vice marshal','alderman','alhaji','ambassador','baron','barones',
+      'brig','brig gen','brig general','brigadier','brigadier general',
+      'brother','canon','capt','captain','cardinal','cdr','chief','cik','cmdr',
+      'coach','col','col dr','colonel','commandant','commander','commissioner',
+      'commodore','comte','comtessa','congressman','conseiller','consul',
+      'conte','contessa','corporal','councillor','count','countess',
+      'crown prince','crown princess','dame','datin','dato','datuk',
+      'datuk seri','deacon','deaconess','dean','dhr','dipl ing','doctor',
+      'dott','dott sa','dr','dr ing','dra','drs','embajador','embajadora','en',
+      'encik','eng','eur ing','exma sra','exmo sr','f o','father',
+      'first lieutient','first officer','flt lieut','flying officer','fr',
+      'frau','fraulein','fru','gen','generaal','general','governor','graaf',
+      'gravin','group captain','grp capt','h e dr','h h','h m','h r h','hajah',
+      'haji','hajim','her highness','her majesty','herr','high chief',
+      'his highness','his holiness','his majesty','hon','hr','hra','ing','ir',
+      'jonkheer','judge','justice','khun ying','kolonel','lady','lcda','lic',
+      'lieut','lieut cdr','lieut col','lieut gen','lord','m','m l','m r',
+      'madame','mademoiselle','maj gen','major','master','mevrouw','miss',
+      'mlle','mme','monsieur','monsignor','mr','mrs','ms','mstr','nti','pastor',
+      'president','prince','princess','princesse','prinses','prof','prof dr',
+      'prof sir','professor','puan','puan sri','rabbi','rear admiral','rev',
+      'rev canon','rev dr','rev mother','reverend','rva','senator','sergeant',
+      'sheikh','sheikha','sig','sig na','sig ra','sir','sister','sqn ldr','sr',
+      'sr d','sra','srta','sultan','tan sri','tan sri dato','tengku','teuku',
+      'than puying','the hon dr','the hon justice','the hon miss','the hon mr',
+      'the hon mrs','the hon ms','the hon sir','the very rev','toh puan','tun',
+      'vice admiral','viscount','viscountess','wg cdr'];
   } else {
-    suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv','md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.','p.c.','ph.d.'];
-    prefixList = ['ab','bar','bin','da','dal','de','de la','del','della','der','di','du','ibn','l\'','la','le','san','st','st.','ste','ter','van','van de','van der','van den','vel','ver','vere','von'];
-    titleList = ['dr','miss','mr','mrs','ms','prof','sir','frau','herr','hr','monsieur','captain','doctor','judge','officer','professor'];
+    suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv',
+      'md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.','p.c.','ph.d.'];
+    prefixList = ['ab','bar','bin','da','dal','de','de la','del','della','der',
+      'di','du','ibn','l\'','la','le','san','st','st.','ste','ter','van',
+      'van de','van der','van den','vel','ver','vere','von'];
+    titleList = ['dr','miss','mr','mrs','ms','prof','sir','frau','herr','hr',
+      'monsieur','captain','doctor','judge','officer','professor'];
   }
 
   // Nickname: remove and store parts with surrounding punctuation as nicknames
@@ -102,7 +164,9 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
   partsFoundCount = partsFound.length;
   if (partsFoundCount === 1) {
     parsedName.nick = partsFound[0].slice(2).slice(0,-2);
-    if (parsedName.nick.slice(-1) === ',') {parsedName.nick = parsedName.nick.slice(0,-1);}
+    if (parsedName.nick.slice(-1) === ',') {
+      parsedName.nick = parsedName.nick.slice(0,-1);
+    }
     nameToParse = (' '+nameToParse+' ').replace(partsFound[0], ' ').trim();
     partsFound = [];
   } else if (partsFoundCount > 1) {
@@ -110,7 +174,9 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
     for (i=0; i<partsFoundCount; i++) {
       nameToParse = (' '+nameToParse+' ').replace(partsFound[i], ' ').trim();
       partsFound[i] = partsFound[i].slice(2).slice(0,-2);
-      if (partsFound[i].slice(-1) === ',') {partsFound[i] = partsFound[i].slice(0,-1);}
+      if (partsFound[i].slice(-1) === ',') {
+        partsFound[i] = partsFound[i].slice(0,-1);
+      }
     }
     parsedName.nick = partsFound.join(', ');
     partsFound = [];
@@ -120,7 +186,7 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
     return partToReturn === 'all' ? parsedName : parsedName[partToReturn];
   }
 
-  // Split remaining nameToParse into parts, remove and store any preceding commas
+  // Split remaining nameToParse into parts, remove and store preceding commas
   for (i=0, n=nameToParse.split(' '), l=n.length; i<l; i++) {
     part = n[i];
     comma = null;
@@ -132,10 +198,14 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
     nameCommas.push(comma);
   }
 
-  // Suffix: remove and store matching parts (w/ or w/o trailing period) as suffixes
-  for(l=nameParts.length, i=l-1; i>0; i--) {
-    partToCheck = (nameParts[i].slice(-1) === '.' ? nameParts[i].slice(0,-1).toLowerCase() : nameParts[i].toLowerCase());
-    if(suffixList.indexOf(partToCheck) > -1 || suffixList.indexOf(partToCheck+'.') > -1){
+  // Suffix: remove and store matching parts as suffixes
+  for (l=nameParts.length, i=l-1; i>0; i--) {
+    partToCheck = (nameParts[i].slice(-1) === '.' ?
+      nameParts[i].slice(0,-1).toLowerCase() : nameParts[i].toLowerCase());
+    if (
+        suffixList.indexOf(partToCheck) > -1 ||
+        suffixList.indexOf(partToCheck+'.') > -1
+      ) {
       partsFound = nameParts.splice(i,1).concat(partsFound);
       if (nameCommas[i] === ',') {
         nameCommas.splice(i+1,1);
@@ -158,10 +228,14 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
     return partToReturn === 'all' ? parsedName : parsedName[partToReturn];
   }
 
-  // Title: remove and store matching parts (w/ or w/o trainilg period) as titles
+  // Title: remove and store matching parts as titles
   for(l=nameParts.length, i=l-1; i>=0; i--) {
-    partToCheck = (nameParts[i].slice(-1) === '.' ? nameParts[i].slice(0,-1).toLowerCase() : nameParts[i].toLowerCase());
-    if(titleList.indexOf(partToCheck) > -1 || titleList.indexOf(partToCheck+'.') > -1){
+    partToCheck = (nameParts[i].slice(-1) === '.' ?
+      nameParts[i].slice(0,-1).toLowerCase() : nameParts[i].toLowerCase());
+    if (
+        titleList.indexOf(partToCheck) > -1 ||
+        titleList.indexOf(partToCheck+'.') > -1
+      ) {
       partsFound = nameParts.splice(i,1).concat(partsFound);
       if (nameCommas[i] === ',') {
         nameCommas.splice(i+1,1);
@@ -199,7 +273,7 @@ exports.parseFullName = function(nameToParse, partToReturn, fixCase, stopOnError
   if (nameParts.length > 2) {
     for (i=nameParts.length-3; i>=0; i--) {
       if (conjunctionList.indexOf(nameParts[i+1].toLowerCase()) > -1) {
-        nameParts[i] = nameParts[i] + ' ' + nameParts[i+1] + ' ' + nameParts[i+2];
+        nameParts[i] = nameParts[i]+' '+nameParts[i+1]+' '+nameParts[i+2];
         nameParts.splice(i+1,2);
         nameCommas.splice(i+1,2);
         i--;

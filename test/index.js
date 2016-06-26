@@ -10,7 +10,7 @@ var verifyName = function(nameToCheck, partsToCheck) {
   assert.equal(nameToCheck.nick, partsToCheck[4]);
   assert.equal(nameToCheck.suffix, partsToCheck[5]);
   assert.equal(nameToCheck.error.length, partsToCheck[6].length);
-  for (var i=1;i<partsToCheck[6].length;i++) {
+  for ( var i = 1, l = partsToCheck[6].length; i < l; i++ ) {
     assert.equal(nameToCheck.error[i], partsToCheck[6][i]);
   }
 };
@@ -138,43 +138,38 @@ describe('parse-full-name', function() {
         ['mr.','jüan','martinez','de lorenzo y gutierez','martin','jr.',[]]);
     });
     it('returns a single part, when specified', function() {
-      assert.equal(
-        parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'title'),'Mr.');
-      assert.equal(
-          parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'first'),'Jüan');
-      assert.equal(
-          parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'middle'),'Martinez');
-      assert.equal(
-          parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'last'),'de Lorenzo y Gutierez');
-      assert.equal(
-          parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'nick'),'Martin');
-      assert.equal(
-          parseFullName('Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
+      assert.equal(parseFullName(
+        'Mr. Jüan Martinez (Martin) de Lorenzo y Gutierez Jr.',
         'suffix'),'Jr.');
     });
     it('continues processing, even when fed garbage input', function() {
-      verifyName(parseFullName('as;dfkj ;aerha;sfa ef;oia;woeig hz;sofi hz;oif'+
-        'j;zoseifj zs;eofij z;soeif jzs;oefi jz;osif z;osefij zs;oif jz;soefi'+
-        'hz;sodifh z;sofu hzsieufh zlsiudfh zksefiulzseofih ;zosufh ;oseihgf'+
-        'z;osef h:OSfih lziusefhaowieufyg oaweifugy'),
-        ['','as;dfkj',';aerha;sfa ef;oia;woeig hz;sofi hz;oif j;zoseifj'+
-        'zs;eofij z;soeif jzs;oefi jz;osif z;osefij zs;oif jz;soefi'+
-        'hz;sodifh z;sofu hzsieufh zlsiudfh zksefiulzseofih ;zosufh ;oseihgf'+
-        'z;osef h:OSfih lziusefhaowieufyg','oaweifugy','','',
-        ['Error: 22 middle names']]);
+      verifyName(parseFullName('as;dfkj ;aerha;sfa ef;oia;woeig hz;sofi hz;oifj;zoseifj zs;eofij z;soeif jzs;oefi jz;osif z;osefij zs;oif jz;soefihz;sodifh z;sofu hzsieufh zlsiudfh zksefiulzseofih ;zosufh ;oseihgfz;osef h:OSfih lziusefhaowieufyg oaweifugy'),
+        ['','as;dfkj',
+          ';aerha;sfa ef;oia;woeig hz;sofi hz;oifj;zoseifj zs;eofij z;soeif jzs;oefi jz;osif z;osefij zs;oif jz;soefihz;sodifh z;sofu hzsieufh zlsiudfh zksefiulzseofih ;zosufh ;oseihgfz;osef h:OSfih lziusefhaowieufyg',
+          'oaweifugy','','',['Error: 22 middle names']]);
     });
     it('returns warnings for null/undefined names', function() {
       verifyName(parseFullName(null),['','','','','','',['Error: No input']]);
       verifyName(parseFullName(),['','','','','','',['Error: No input']]);
     });
     it('will throw errors, when specified', function() {
-      assert.doesNotThrow(function(){return parseFullName('');});
-      assert.throws(function(){return parseFullName('','all',-1,1);});
+      assert.doesNotThrow(function(){ return parseFullName(''); });
+      assert.throws(function(){ return parseFullName('','all',-1,1); });
     });
   });
 });

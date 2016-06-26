@@ -12,17 +12,17 @@ parseFullName():
 2. analyzes and attempts to detect the format of that name,
 3. (if possible) parses the name into its component parts, and
 4. (by default) returns an object containing all individual parts of the name:
-    - title (string): title (e.g. "Ms." or "Dr.")
+    - title (string): title(s) (e.g. "Ms." or "Dr.")
     - first (string): first name or initial
-    - middle (string): middle name or initial
+    - middle (string): middle name(s) or initial(s)
     - last (string): last name or initial
-    - nick (string): nickname
-    - suffix (string): suffix (e.g. "Jr.", "II", or "Esq.")
+    - nick (string): nickname(s)
+    - suffix (string): suffix(es) (e.g. "Jr.", "II", or "Esq.")
     - error (array of strings): any parsing error messages
 
 Optionally, parseFullName() can also:
 
-* return only the specified part of a name as a string
+* return only the specified part of a name as a string (or errors as an array)
 * always fix or ignore the letter case of the returned parts (the default is
     to fix the case only when the original input is all upper or all lowercase)
 * stop on errors (the default is to return warning messages in the output,
@@ -58,29 +58,29 @@ nameToParse (string, required): the name to be parsed
 partToReturn (string, optional): the name of a single part to return
 
   - 'all' (default) = return an object containing all name parts
-  - 'title' = return only the title as a string (or an empty string)
+  - 'title' = return only the title(s) as a string (or an empty string)
   - 'first' = return only the first name as a string (or an empty string)
-  - 'middle' = return only the middle name as a string (or an empty string)
+  - 'middle' = return only the middle name(s) as a string (or an empty string)
   - 'last' = return only the last name as a string (or an empty string)
-  - 'nick' = return only the nickname as a string (or an empty string)
-  - 'suffix' = return only the suffix as a string (or an empty string)
+  - 'nick' = return only the nickname(s) as a string (or an empty string)
+  - 'suffix' = return only the suffix(es) as a string (or an empty string)
   - 'error' = return only the array of parsing error messages (or an empty array)
 
 fixCase (integer, optional): fix case of output name
 
-  - 0 = never fix the case, retain and output same case as input name
   - -1 (default) = fix case only if input name is all upper or lowercase
-  - 1 = always fix case of output, even if input is mixed case
+  - 0 or false = never fix the case (retain and output same case as input name)
+  - 1 or true = always fix case of output, even if input is mixed case
 
 stopOnError (integer, optional): makes parsing errors throw JavaScript errors
 
-  - 0 (default) = return warnings about potential parsing errors, but continue
-  - 1 = if a parsing error is found, throw a JavaScript error
+  - 0 or false (default) = return warnings about parsing errors, but continue
+  - 1 or true = if a parsing error is found, throw a JavaScript error
 
 useLongLists (integer, optional): use long prefix, suffix, and title lists
 
-  - 0 (default) = use default lists (29 prefixes, 19 suffixes, and 16 titles)
-  - 1 = use experimental long lists (97 prefixes, 23 suffixes, and 204 titles)
+  - 0 or false (default) = use default lists (29 prefixes, 19 suffixes, 16 titles)
+  - 1 or true = use experimental long lists (97 prefixes, 23 suffixes, 204 titles)
   Note: The alternate long lists are experimental and have not been tested.
   Be especially careful using the long prefix list, which may incorrectly
   detect "Ben" as a prefix, which is common in middle-eastern names,

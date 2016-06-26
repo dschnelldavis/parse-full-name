@@ -1,17 +1,24 @@
 {
   "name": "parse-full-name",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A function that accpts the full name of a person in any format, parses it, and returns its parts { title, first name, middle name, last name, nickname, suffix, [and any parsing errors] }.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
-    "type": "git", "url": "https://github.com/dschnelldavis/parse-full-name"
+    "type": "git",
+    "url": "https://github.com/dschnelldavis/parse-full-name"
   },
   "keywords": [
-    "parse", "parser", "name", "full name", "first name", "middle name",
-    "last name", "nickname"
+    "parse",
+    "parser",
+    "name",
+    "full name",
+    "first name",
+    "middle name",
+    "last name",
+    "nickname"
   ],
   "author": "David Schnell-Davis <dschnelldavis@gmail.com> (http://github.com/dschnelldavis)",
   "license": "MIT",

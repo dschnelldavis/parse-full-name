@@ -1,6 +1,6 @@
 {
   "name": "parse-full-name",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A function that accepts the full name of a person in any format, parses it, and returns its parts { title, first name, middle name, last name, nickname, suffix, [and any parsing errors] }.",
   "main": "index.js",
   "scripts": {

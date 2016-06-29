@@ -102,6 +102,11 @@ assert.equal(name.suffix, 'Jr.');
 assert.equal(name.error, []);
 ```
 
+## Reporting Bugs
+
+If you find a name this function does not parse correctly, or any other bug,
+please report it here: https://github.com/dschnelldavis/parse-full-name/issues
+
 ## Credits and precursors
 
 Before creating this function I studied many other name-parsing functions.

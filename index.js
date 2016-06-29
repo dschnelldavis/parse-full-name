@@ -12,9 +12,9 @@ exports.parseFullName = function parseFullName(
     };
 
   // Validate inputs, or set to defaults
-  partToReturn = partToReturn && partToReturn.toLowerCase() in {
-    'title':'','first':'','middle':'','last':'','nick':'','suffix':'','error':''
-  } ? partToReturn.toLowerCase() : 'all';
+  partToReturn = partToReturn && ['title','first','middle','last','nick',
+    'suffix','error'].indexOf(partToReturn.toLowerCase()) > -1 ?
+    partToReturn.toLowerCase() : 'all';
     // 'all' = return object with all parts, others return single part
   if ( fixCase === false ) fixCase = 0;
   if ( fixCase === true ) fixCase = 1;
@@ -73,7 +73,7 @@ exports.parseFullName = function parseFullName(
                 nameParts[j].slice(-1) !== '.' &&
                 !suffixList.indexOf(nameParts[j].toLowerCase())
               ) { // Convert suffix abbreviations to UPPER CASE
-              if (namePartWords[j] === namePartWords[j].toLowerCase()) {
+              if ( namePartWords[j] === namePartWords[j].toLowerCase() ) {
                 namePartWords[j] = namePartWords[j].toUpperCase();
               }
             } else { // Convert to Title Case
@@ -89,7 +89,7 @@ exports.parseFullName = function parseFullName(
   }
 
   // If no input name, or input name is not a string, abort
-  if( !nameToParse || typeof nameToParse !== 'string' ) {
+  if ( !nameToParse || typeof nameToParse !== 'string' ) {
     handleError('No input');
     parsedName = fixParsedNameCase(parsedName, fixCase);
     return partToReturn === 'all' ? parsedName : parsedName[partToReturn];
@@ -161,7 +161,7 @@ exports.parseFullName = function parseFullName(
   // Nickname: remove and store parts with surrounding punctuation as nicknames
   regex = /\s(?:[‘’']([^‘’']+)[‘’']|[“”"]([^“”"]+)[“”"]|\[([^\]]+)\]|\(([^\)]+)\)),?\s/g;
   partFound = (' '+nameToParse+' ').match(regex);
-  if ( partFound ) { partsFound = partsFound.concat(partFound); }
+  if ( partFound ) partsFound = partsFound.concat(partFound);
   partsFoundCount = partsFound.length;
   if ( partsFoundCount === 1 ) {
     parsedName.nick = partsFound[0].slice(2).slice(0,-2);

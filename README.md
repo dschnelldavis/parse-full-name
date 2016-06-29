@@ -1,5 +1,9 @@
 # parse-full-name
 
+[![Build](https://travis-ci.org/dschnelldavis/parse-full-name.svg?branch=master)](https://travis-ci.org/dschnelldavis/parse-full-name)
+[![Dependencies](https://david-dm.org/dschnelldavis/parse-full-name.svg)](https://david-dm.org/dschnelldavis/parse-full-name)
+[![Vulnerabilities](https://snyk.io/test/npm/parse-full-name/badge.svg?style=flat-square)](https://snyk.io/test/npm/parse-full-name)
+
 ## Description
 
 parseFullName() is designed to parse large batches of full names in multiple

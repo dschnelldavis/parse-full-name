@@ -4,6 +4,3 @@ node_js:
   - "5"
   - "4"
   - "iojs"
-after_success:
-  - coveralls
-  - bash <(curl -s https://codecov.io/bash)

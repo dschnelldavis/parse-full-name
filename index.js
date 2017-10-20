@@ -147,7 +147,7 @@ exports.parseFullName = function parseFullName(
       'sr d','sra','srta','sultan','tan sri','tan sri dato','tengku','teuku',
       'than puying','the hon dr','the hon justice','the hon miss','the hon mr',
       'the hon mrs','the hon ms','the hon sir','the very rev','toh puan','tun',
-      'vice admiral','viscount','viscountess','wg cdr'];
+      'vice admiral','viscount','viscountess','wg cdr', 'ind', 'misc', 'mx'];
   } else {
     suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv',
       'md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.','p.c.','ph.d.'];
@@ -155,7 +155,8 @@ exports.parseFullName = function parseFullName(
       'di','du','ibn','l\'','la','le','san','st','st.','ste','ter','van',
       'van de','van der','van den','vel','ver','vere','von'];
     titleList = ['dr','miss','mr','mrs','ms','prof','sir','frau','herr','hr',
-      'monsieur','captain','doctor','judge','officer','professor'];
+      'monsieur','captain','doctor','judge','officer','professor', 'ind', 'misc',
+      'mx'];
   }
 
   // Nickname: remove and store parts with surrounding punctuation as nicknames

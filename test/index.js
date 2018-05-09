@@ -22,6 +22,8 @@ describe('parse-full-name', function() {
         ['','David','','Davis','','',[]]);
       verifyName(parseFullName('Davis, David'),
         ['','David','','Davis','','',[]]);
+      verifyName(parseFullName('Karl-Heinz Müller'),
+        ['','Karl-Heinz','','Müller','','',[]]);
     });
     it('parses last names', function() {
       verifyName(parseFullName('Gerald Böck'),

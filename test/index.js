@@ -136,6 +136,8 @@ describe('parse-full-name', function() {
       verifyName(parseFullName(
         'mr. jüan martinez (martin) de lorenzo y gutierez jr.','all',0),
         ['mr.','jüan','martinez','de lorenzo y gutierez','martin','jr.',[]]);
+      verifyName(parseFullName('Karl-Heinz Müller', 'all', 1),
+        ['','Karl-Heinz','','Müller','','',[]]);
     });
     it('returns a single part, when specified', function() {
       assert.equal(parseFullName(

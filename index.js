@@ -107,8 +107,8 @@ exports.parseFullName = function parseFullName(
   // Note: These list entries must be all lowercase
   if ( useLongLists ) {
     suffixList = ['esq','esquire','jr','jnr','sr','snr','2','ii','iii','iv',
-      'v','clu','chfc','cfp','md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.',
-      'p.c.','ph.d.'];
+      'v','clu','chfc','cfp','dvm','d.v.m.','md','phd','j.d.','ll.m.','m.d.','d.o.','d.c.',
+      'p.c.','ph.d.','vmd','v.m.d.'];
     prefixList = ['a','ab','antune','ap','abu','al','alm','alt','bab','bäck',
       'bar','bath','bat','beau','beck','ben','berg','bet','bin','bint','birch',
       'björk','björn','bjur','da','dahl','dal','de','degli','dele','del',

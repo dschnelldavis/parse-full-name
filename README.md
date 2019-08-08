@@ -41,6 +41,12 @@ for links to several other excellent parsers which may suit your needs better.
 
 ## Use
 
+### Install
+
+```bash
+npm install parse-full-name
+```
+
 ### Basic Use
 
 ```javascript
